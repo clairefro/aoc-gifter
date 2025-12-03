@@ -7,8 +7,8 @@ const candidates = {
   merch: [path.join(root, "src", "assets", "merch")],
 };
 
-const publicDir = path.join(root, "public");
-const publicAssetsDir = path.join(publicDir, "assets");
+const docsDir = path.join(root, "docs");
+const docsAssetsDir = path.join(docsDir, "assets");
 
 function ensureDir(d) {
   if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
@@ -36,13 +36,13 @@ function gatherFiles(candidateDirs) {
 // collect files
 const merchFiles = gatherFiles(candidates.merch);
 
-// prepare public folders and copy files into public/assets/merch
-ensureDir(publicAssetsDir);
-const publicMerchDir = path.join(publicAssetsDir, "merch");
-ensureDir(publicMerchDir);
+// prepare docs folders and copy files into docs/assets/merch
+ensureDir(docsAssetsDir);
+const docsMerchDir = path.join(docsAssetsDir, "merch");
+ensureDir(docsMerchDir);
 
 function copyList(list, destDir) {
-  const publicPaths = [];
+  const docsPaths = [];
   for (const item of list) {
     const dest = path.join(destDir, item.name);
     try {
@@ -53,21 +53,21 @@ function copyList(list, destDir) {
       ) {
         fs.copyFileSync(item.src, dest);
       }
-      publicPaths.push(
+      docsPaths.push(
         path.posix.join("assets", path.basename(destDir), item.name)
       );
     } catch (err) {
       console.error("Failed to copy", item.src, "->", dest, err.message);
     }
   }
-  return publicPaths;
+  return docsPaths;
 }
 
-const publicMerch = copyList(merchFiles, publicMerchDir);
+const docsMerch = copyList(merchFiles, docsMerchDir);
 
-// Ensure styles.css is copied to the public directory
+// Ensure styles.css is copied to the docs directory
 const stylesSrc = path.join(root, "src", "styles.css");
-const stylesDest = path.join(publicDir, "src", "styles.css");
+const stylesDest = path.join(docsDir, "src", "styles.css");
 ensureDir(path.dirname(stylesDest));
 try {
   fs.copyFileSync(stylesSrc, stylesDest);
@@ -76,9 +76,9 @@ try {
   console.error("Failed to copy styles.css", err.message);
 }
 
-// Ensure app.js is copied to the public directory
+// Ensure app.js is copied to the docs directory
 const appJsSrc = path.join(root, "src", "app.js");
-const appJsDest = path.join(publicDir, "src", "app.js");
+const appJsDest = path.join(docsDir, "src", "app.js");
 ensureDir(path.dirname(appJsDest));
 try {
   fs.copyFileSync(appJsSrc, appJsDest);
@@ -88,7 +88,7 @@ try {
 }
 
 // Automatically select the first merch item in the HTML
-const merchHtml = publicMerch
+const merchHtml = docsMerch
   .map(
     (p, i) => `
       <li>
@@ -167,16 +167,16 @@ ${merchHtml}
 </html>`;
 
 try {
-  const htmlPath = path.join(publicDir, "index.html");
+  const htmlPath = path.join(docsDir, "index.html");
 
   fs.writeFileSync(htmlPath, html, { encoding: "utf8" });
   console.log("Wrote", htmlPath);
 } catch (err) {
-  console.error("Failed to write public/index.html", err);
+  console.error("Failed to write docs/index.html", err);
 }
 
 // Update preload.js to ensure the blue background is consistently redrawn during merch selection
-const preloadJs = `window.PRELOAD_MERCH_URLS = ${JSON.stringify(publicMerch)};
+const preloadJs = `window.PRELOAD_MERCH_URLS = ${JSON.stringify(docsMerch)};
 
 // Function to draw the canvas background
 const drawBackground = (ctx, canvas) => {
@@ -243,7 +243,7 @@ merchOptions.forEach((option) => {
   });
 });`;
 
-const preloadJsPath = path.join(publicDir, "preload.js");
+const preloadJsPath = path.join(docsDir, "preload.js");
 try {
   fs.writeFileSync(preloadJsPath, preloadJs, { encoding: "utf8" });
   console.log("Wrote", preloadJsPath);

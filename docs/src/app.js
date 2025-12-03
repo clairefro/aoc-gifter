@@ -136,27 +136,25 @@ async function processForeground() {
 
   // Background removal
   const bgColor = sampleEdges(g, w, h);
-    const tolerance = Number(toleranceEl.value);
-    const id = g.getImageData(0, 0, w, h);
-    const data = id.data;
+  const tolerance = Number(toleranceEl.value);
+  const id = g.getImageData(0, 0, w, h);
+  const data = id.data;
 
-    // First pass: Remove background with tolerance
-    for (let p = 0; p < data.length; p += 4) {
-      const dr = data[p] - bgColor.r;
-      const dg = data[p + 1] - bgColor.g;
-      const db = data[p + 2] - bgColor.b;
-      const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-      if (dist <= tolerance) {
-        data[p + 3] = 0;
-      } else if (dist <= tolerance * 1.5) {
-        // Feather edge pixels for smoother transition
-        data[p + 3] = Math.round(
-          ((dist - tolerance) / (tolerance * 0.5)) * 255
-        );
-      }
+  // First pass: Remove background with tolerance
+  for (let p = 0; p < data.length; p += 4) {
+    const dr = data[p] - bgColor.r;
+    const dg = data[p + 1] - bgColor.g;
+    const db = data[p + 2] - bgColor.b;
+    const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+    if (dist <= tolerance) {
+      data[p + 3] = 0;
+    } else if (dist <= tolerance * 1.5) {
+      // Feather edge pixels for smoother transition
+      data[p + 3] = Math.round(((dist - tolerance) / (tolerance * 0.5)) * 255);
     }
+  }
 
-    g.putImageData(id, 0, 0);
+  g.putImageData(id, 0, 0);
 
   processedFgCanvas = c;
   return c;
@@ -528,8 +526,6 @@ window.addEventListener("mousemove", (e) => {
 window.addEventListener("mouseup", () => {
   dragging = false;
 });
-
-
 
 // touch - check avatar first, then merch
 preview.addEventListener("touchstart", (e) => {
