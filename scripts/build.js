@@ -5,7 +5,6 @@ const path = require("path");
 const root = process.cwd();
 const candidates = {
   merch: [path.join(root, "src", "assets", "merch")],
-  backgrounds: [path.join(root, "src", "assets", "backgrounds")],
 };
 
 const publicDir = path.join(root, "public");
@@ -36,14 +35,11 @@ function gatherFiles(candidateDirs) {
 
 // collect files
 const merchFiles = gatherFiles(candidates.merch);
-const bgFiles = gatherFiles(candidates.backgrounds);
 
-// prepare public folders and copy files into public/assets/merch and public/assets/backgrounds
+// prepare public folders and copy files into public/assets/merch
 ensureDir(publicAssetsDir);
 const publicMerchDir = path.join(publicAssetsDir, "merch");
-const publicBgDir = path.join(publicAssetsDir, "backgrounds");
 ensureDir(publicMerchDir);
-ensureDir(publicBgDir);
 
 function copyList(list, destDir) {
   const publicPaths = [];
@@ -68,7 +64,6 @@ function copyList(list, destDir) {
 }
 
 const publicMerch = copyList(merchFiles, publicMerchDir);
-const publicBgs = copyList(bgFiles, publicBgDir);
 
 // Ensure styles.css is copied to the public directory
 const stylesSrc = path.join(root, "src", "styles.css");
@@ -92,7 +87,7 @@ try {
   console.error("Failed to copy app.js", err.message);
 }
 
-// Update paths in the HTML template to reflect the new asset structure
+// Automatically select the first merch item in the HTML
 const merchHtml = publicMerch
   .map(
     (p, i) => `
@@ -106,20 +101,8 @@ const merchHtml = publicMerch
       </li>`
   )
   .join("\n");
-const bgHtml = publicBgs
-  .map(
-    (p, i) => `
-      <li>
-        <label>
-          <input type="radio" name="background" value="${p}" ${
-      i === 0 ? "checked" : ""
-    } />
-          <img src="${p}" alt="bg-${i}" />
-        </label>
-      </li>`
-  )
-  .join("\n");
 
+// Update HTML layout to ensure controls are on the left and canvas is on the right
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -127,41 +110,28 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AOC Gifter — Editor</title>
   <link rel="stylesheet" href="/src/styles.css" />
-  <style>
-    .bg-options img {
-      max-width: 100px;
-      max-height: 100px;
-    }
-    .bg-options ul {
-      list-style: none; /* Remove bullet styling */
-      padding: 0;
-      margin: 0; /* Ensure no extra spacing */
-    }
-    .bg-options li {
-      margin-bottom: 10px;
-    }
-  </style>
 </head>
 <body>
   <header>
-    <h1>AOC Gifter — Cut & Paste PNGs</h1>
+    <h1>AOC Gifter</h1>
   </header>
   <main style="display: flex;">
-    <div style="flex: 3;">
+    <div style="flex: 1;">
       <section class="controls">
         <div class="panel">
-          <h2>Avatar (foreground)</h2>
+          <h2>Head</h2>
           <input id="fgFile" type="file" accept="image/png" />
           <div class="row">
             <label>Tolerance: <span id="tolVal">32</span></label>
             <input id="tolerance" type="range" min="0" max="200" value="32" />
           </div>
+
           <div class="row">
-            <label>Avatar Scale: <span id="scaleVal">1.00</span></label>
+            <label>Head Scale: <span id="scaleVal">1.00</span></label>
             <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
           </div>
           <div class="row">
-            <button id="resetFg">Reset Avatar</button>
+            <button id="resetFg">Reset Head</button>
             <button id="exportBtn">Export PNG</button>
           </div>
         </div>
@@ -176,18 +146,13 @@ ${merchHtml}
             <input id="merchScale" type="range" min="0.1" max="3" step="0.01" value="1" />
           </div>
         </div>
-
-        <div class="panel">
-          <h2>Backgrounds — choose one</h2>
-          <ul id="bgOptions" class="bg-options">
-${bgHtml}
-          </ul>
-        </div>
       </section>
+    </div>
 
+    <div style="flex: 2;">
       <section class="canvas-area">
-        <canvas id="preview" width="800" height="600"></canvas>
-        <div class="help">Drag the avatar on the canvas to position it. Use the Avatar Scale slider to resize.</div>
+        <canvas id="preview" width="600" height="700"></canvas>
+        <div class="help">Drag the head on the canvas to position it. Use the Head Scale slider to resize.</div>
       </section>
     </div>
   </main>
@@ -196,6 +161,7 @@ ${bgHtml}
     <small>All processing is done locally in your browser.</small>
   </footer>
 
+  <script src="/preload.js"></script>
   <script type="module" src="/src/app.js"></script>
 </body>
 </html>`;
@@ -207,4 +173,80 @@ try {
   console.log("Wrote", htmlPath);
 } catch (err) {
   console.error("Failed to write public/index.html", err);
+}
+
+// Update preload.js to ensure the blue background is consistently redrawn during merch selection
+const preloadJs = `window.PRELOAD_MERCH_URLS = ${JSON.stringify(publicMerch)};
+
+// Function to draw the canvas background
+const drawBackground = (ctx, canvas) => {
+  ctx.fillStyle = '#0e1022'; // Blue background color
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+};
+
+// Function to draw text with glow
+const drawText = (ctx) => {
+  ctx.save();
+  ctx.font = 'bold 24px "Source Code Pro", monospace';
+  ctx.fillStyle = '#39ff14';
+  ctx.shadowColor = '#39ff14';
+  ctx.shadowBlur = 15;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.fillText('Advent of Code', 20, 40);
+  ctx.fillText('0xffff&2025', 20, 70);
+  ctx.restore();
+};
+
+// Function to draw the merch image with glow
+const drawMerch = (ctx, canvas, merchImage) => {
+  const centerX = (canvas.width - merchImage.width) / 2;
+  const centerY = (canvas.height - merchImage.height) / 2;
+  
+  // Draw white glow behind merch
+  ctx.save();
+  ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+  ctx.shadowBlur = 40;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.drawImage(merchImage, centerX, centerY);
+  ctx.restore();
+  
+  // Draw merch on top
+  ctx.drawImage(merchImage, centerX, centerY);
+};
+
+// Load and center the selected merch item
+const loadMerch = (merchUrl) => {
+  const canvas = document.getElementById('preview');
+  const ctx = canvas.getContext('2d');
+  const merchImage = new Image();
+  merchImage.src = merchUrl;
+  merchImage.onload = () => {
+    // Always redraw the background first
+    drawBackground(ctx, canvas);
+    drawMerch(ctx, canvas, merchImage);
+    drawText(ctx);
+  };
+};
+
+// Automatically load the first merch item
+if (window.PRELOAD_MERCH_URLS.length > 0) {
+  loadMerch(window.PRELOAD_MERCH_URLS[0]);
+}
+
+// Add event listener for merch selection
+const merchOptions = document.querySelectorAll('input[name="merch"]');
+merchOptions.forEach((option) => {
+  option.addEventListener('change', (e) => {
+    loadMerch(e.target.value);
+  });
+});`;
+
+const preloadJsPath = path.join(publicDir, "preload.js");
+try {
+  fs.writeFileSync(preloadJsPath, preloadJs, { encoding: "utf8" });
+  console.log("Wrote", preloadJsPath);
+} catch (err) {
+  console.error("Failed to write preload.js", err);
 }
