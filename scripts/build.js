@@ -161,8 +161,8 @@ ${merchHtml}
     <small>All processing is done locally in your browser.</small>
   </footer>
 
-  <script src="/preload.js"></script>
-  <script type="module" src="/src/app.js"></script>
+  <script src="./preload.js"></script>
+  <script type="module" src="./src/app.js"></script>
 </body>
 </html>`;
 
