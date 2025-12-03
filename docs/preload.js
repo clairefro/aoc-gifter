@@ -64,3 +64,43 @@ merchOptions.forEach((option) => {
     loadMerch(e.target.value);
   });
 });
+
+// Play background music on user interaction
+const bgMusic = document.getElementById('bgMusic');
+const audioToggle = document.getElementById('audioToggle');
+
+// Restore audio preference from localStorage (default to true)
+let audioEnabled = localStorage.getItem('aocAudioEnabled') !== 'false';
+
+if (bgMusic && audioToggle) {
+  // Set initial button state based on saved preference
+  audioToggle.textContent = audioEnabled ? '🔊 Nullsleep - silent night' : '🔇 Sound Off';
+  
+  const playMusic = () => {
+    if (audioEnabled) {
+      bgMusic.play().catch(err => console.log('Audio play prevented:', err));
+    }
+    // Remove listeners after first play attempt
+    document.removeEventListener('click', playMusic);
+    document.removeEventListener('keydown', playMusic);
+  };
+  
+  audioToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    audioEnabled = !audioEnabled;
+    
+    // Save preference to localStorage
+    localStorage.setItem('aocAudioEnabled', audioEnabled);
+    
+    if (audioEnabled) {
+      bgMusic.play().catch(err => console.log('Audio play prevented:', err));
+      audioToggle.textContent = '🔊 Nullsleep - silent night';
+    } else {
+      bgMusic.pause();
+      audioToggle.textContent = '🔇 Sound Off';
+    }
+  });
+  
+  document.addEventListener('click', playMusic);
+  document.addEventListener('keydown', playMusic);
+}

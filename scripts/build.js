@@ -5,6 +5,7 @@ const path = require("path");
 const root = process.cwd();
 const candidates = {
   merch: [path.join(root, "src", "assets", "merch")],
+  sound: [path.join(root, "src", "assets", "sound")],
 };
 
 const docsDir = path.join(root, "docs");
@@ -21,7 +22,7 @@ function gatherFiles(candidateDirs) {
     try {
       const items = fs.readdirSync(dir);
       for (const f of items) {
-        if (!/\.(png|jpg|jpeg|webp|avif)$/i.test(f)) continue;
+        if (!/\.(png|jpg|jpeg|webp|avif|mp3)$/i.test(f)) continue;
         if (seen.has(f)) continue;
         seen.add(f);
         out.push({ name: f, src: path.join(dir, f) });
@@ -35,11 +36,14 @@ function gatherFiles(candidateDirs) {
 
 // collect files
 const merchFiles = gatherFiles(candidates.merch);
+const soundFiles = gatherFiles(candidates.sound);
 
 // prepare docs folders and copy files into docs/assets/merch
 ensureDir(docsAssetsDir);
 const docsMerchDir = path.join(docsAssetsDir, "merch");
 ensureDir(docsMerchDir);
+const docsSoundDir = path.join(docsAssetsDir, "sound");
+ensureDir(docsSoundDir);
 
 function copyList(list, destDir) {
   const docsPaths = [];
@@ -64,6 +68,7 @@ function copyList(list, destDir) {
 }
 
 const docsMerch = copyList(merchFiles, docsMerchDir);
+const docsSound = copyList(soundFiles, docsSoundDir);
 
 // Ensure styles.css is copied to the docs directory
 const stylesSrc = path.join(root, "src", "styles.css");
@@ -114,6 +119,7 @@ const html = `<!doctype html>
 <body>
   <header>
     <h1>AOC Gifter</h1>
+    <button id="audioToggle" style="position: absolute; top: 20px; right: 20px; padding: 8px 16px; cursor: pointer; font-size: 14px;">🔊 Sound On</button>
   </header>
   <main style="display: flex;">
     <div style="flex: 1;">
@@ -129,6 +135,10 @@ const html = `<!doctype html>
           <div class="row">
             <label>Head Scale: <span id="scaleVal">1.00</span></label>
             <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
+          </div>
+          <div class="row">
+            <label>Head Rotation: <span id="rotationVal">0</span>°</label>
+            <input id="rotation" type="range" min="0" max="360" step="1" value="0" />
           </div>
           <div class="row">
             <button id="resetFg">Reset Head</button>
@@ -152,7 +162,10 @@ ${merchHtml}
     <div style="flex: 2;">
       <section class="canvas-area">
         <canvas id="preview" width="600" height="700"></canvas>
-        <div class="help">Drag the head on the canvas to position it. Use the Head Scale slider to resize.</div>
+        <div class="help">Drag the head and merch on the canvas to position. Use the sliders to resize and rotate.</div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button id="exportCanvasBtn" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Export PNG</button>
+        </div>
       </section>
     </div>
   </main>
@@ -160,6 +173,10 @@ ${merchHtml}
   <footer>
     <small>All processing is done locally in your browser.</small>
   </footer>
+
+  <audio id="bgMusic" loop>
+    <source src="./assets/sound/Nullsleep - silent night.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="./preload.js"></script>
   <script type="module" src="./src/app.js"></script>
@@ -241,7 +258,47 @@ merchOptions.forEach((option) => {
   option.addEventListener('change', (e) => {
     loadMerch(e.target.value);
   });
-});`;
+});
+
+// Play background music on user interaction
+const bgMusic = document.getElementById('bgMusic');
+const audioToggle = document.getElementById('audioToggle');
+
+// Restore audio preference from localStorage (default to true)
+let audioEnabled = localStorage.getItem('aocAudioEnabled') !== 'false';
+
+if (bgMusic && audioToggle) {
+  // Set initial button state based on saved preference
+  audioToggle.textContent = audioEnabled ? '🔊 Nullsleep - silent night' : '🔇 Sound Off';
+  
+  const playMusic = () => {
+    if (audioEnabled) {
+      bgMusic.play().catch(err => console.log('Audio play prevented:', err));
+    }
+    // Remove listeners after first play attempt
+    document.removeEventListener('click', playMusic);
+    document.removeEventListener('keydown', playMusic);
+  };
+  
+  audioToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    audioEnabled = !audioEnabled;
+    
+    // Save preference to localStorage
+    localStorage.setItem('aocAudioEnabled', audioEnabled);
+    
+    if (audioEnabled) {
+      bgMusic.play().catch(err => console.log('Audio play prevented:', err));
+      audioToggle.textContent = '🔊 Nullsleep - silent night';
+    } else {
+      bgMusic.pause();
+      audioToggle.textContent = '🔇 Sound Off';
+    }
+  });
+  
+  document.addEventListener('click', playMusic);
+  document.addEventListener('keydown', playMusic);
+}`;
 
 const preloadJsPath = path.join(docsDir, "preload.js");
 try {
