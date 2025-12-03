@@ -1,75 +1,100 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AOC Gifter — Editor</title>
-  <link rel="stylesheet" href="/src/styles.css" />
-</head>
-<body>
-  <header>
-    <h1>AOC Gifter</h1>
-  </header>
-  <main style="display: flex;">
-    <div style="flex: 1;">
-      <section class="controls">
-        <div class="panel">
-          <h2>Head</h2>
-          <input id="fgFile" type="file" accept="image/png" />
-          <div class="row">
-            <label>Tolerance: <span id="tolVal">32</span></label>
-            <input id="tolerance" type="range" min="0" max="200" value="32" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AOC Gifter — Editor</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>AOC Gifter</h1>
+    </header>
+    <main style="display: flex">
+      <div style="flex: 1">
+        <section class="controls">
+          <div class="panel">
+            <h2>Head</h2>
+            <input id="fgFile" type="file" accept="image/png" />
+            <div class="row">
+              <label>Tolerance: <span id="tolVal">32</span></label>
+              <input id="tolerance" type="range" min="0" max="200" value="32" />
+            </div>
+
+            <div class="row">
+              <label>Head Scale: <span id="scaleVal">1.00</span></label>
+              <input
+                id="scale"
+                type="range"
+                min="0.1"
+                max="3"
+                step="0.01"
+                value="1"
+              />
+            </div>
+            <div class="row">
+              <button id="resetFg">Reset Head</button>
+              <button id="exportBtn">Export PNG</button>
+            </div>
           </div>
 
-          <div class="row">
-            <label>Head Scale: <span id="scaleVal">1.00</span></label>
-            <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
+          <div class="panel">
+            <h2>Merch — choose one</h2>
+            <ul id="merchOptions" class="bg-options">
+              <li>
+                <label>
+                  <input
+                    type="radio"
+                    name="merch"
+                    value="assets/merch/long-t-500.png"
+                    checked
+                  />
+                  <img src="assets/merch/long-t-500.png" alt="merch-0" />
+                </label>
+              </li>
+
+              <li>
+                <label>
+                  <input
+                    type="radio"
+                    name="merch"
+                    value="assets/merch/t-500.png"
+                  />
+                  <img src="assets/merch/t-500.png" alt="merch-1" />
+                </label>
+              </li>
+            </ul>
+            <div class="row">
+              <label>Merch Scale: <span id="merchScaleVal">1.00</span></label>
+              <input
+                id="merchScale"
+                type="range"
+                min="0.1"
+                max="3"
+                step="0.01"
+                value="1"
+              />
+            </div>
           </div>
-          <div class="row">
-            <button id="resetFg">Reset Head</button>
-            <button id="exportBtn">Export PNG</button>
+        </section>
+      </div>
+
+      <div style="flex: 2">
+        <section class="canvas-area">
+          <canvas id="preview" width="600" height="700"></canvas>
+          <div class="help">
+            Drag the head on the canvas to position it. Use the Head Scale
+            slider to resize.
           </div>
-        </div>
+        </section>
+      </div>
+    </main>
 
-        <div class="panel">
-          <h2>Merch — choose one</h2>
-          <ul id="merchOptions" class="bg-options">
+    <footer>
+      <small>All processing is done locally in your browser.</small>
+    </footer>
 
-      <li>
-        <label>
-          <input type="radio" name="merch" value="assets/merch/long-t-500.png" checked />
-          <img src="assets/merch/long-t-500.png" alt="merch-0" />
-        </label>
-      </li>
-
-      <li>
-        <label>
-          <input type="radio" name="merch" value="assets/merch/t-500.png"  />
-          <img src="assets/merch/t-500.png" alt="merch-1" />
-        </label>
-      </li>
-          </ul>
-          <div class="row">
-            <label>Merch Scale: <span id="merchScaleVal">1.00</span></label>
-            <input id="merchScale" type="range" min="0.1" max="3" step="0.01" value="1" />
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div style="flex: 2;">
-      <section class="canvas-area">
-        <canvas id="preview" width="600" height="700"></canvas>
-        <div class="help">Drag the head on the canvas to position it. Use the Head Scale slider to resize.</div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <small>All processing is done locally in your browser.</small>
-  </footer>
-
-  <script src="/preload.js"></script>
-  <script type="module" src="/src/app.js"></script>
-</body>
+    <script src="./preload.js"></script>
+    <script type="module" src="./src/app.js"></script>
+  </body>
 </html>
