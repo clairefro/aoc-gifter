@@ -1,5 +1,26 @@
 const preview = document.getElementById("preview");
 const ctx = preview.getContext("2d");
+const modeIndicator = document.getElementById("modeIndicator");
+const jingleSound = document.getElementById("jingleSound");
+const sleighBells = document.getElementById("sleighBells");
+
+// Check if audio is enabled (from localStorage)
+let audioEnabled = localStorage.getItem("aocAudioEnabled") !== "false";
+
+// Expose function to update audioEnabled from outside
+window.updateAudioEnabled = function (enabled) {
+  audioEnabled = enabled;
+};
+
+// Function to play jingle sound
+function playJingle() {
+  if (audioEnabled && jingleSound) {
+    jingleSound.currentTime = 0; // Reset to start
+    jingleSound
+      .play()
+      .catch((err) => console.log("Jingle play prevented:", err));
+  }
+}
 
 const fgFile = document.getElementById("fgFile");
 const toleranceEl = document.getElementById("tolerance");
@@ -107,6 +128,7 @@ function selectMerch(i) {
     merchPos.y = (preview.height - mh) / 2 + preview.height * 0.15;
   }
 
+  playJingle();
   drawPreview();
 }
 
@@ -381,7 +403,13 @@ function drawPreview() {
   placedStamps.forEach((stamp) => {
     const sw = stamp.img.width * stamp.scale;
     const sh = stamp.img.height * stamp.scale;
+    
+    // Draw white glow behind stamp
+    ctx.save();
+    ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+    ctx.shadowBlur = 15;
     ctx.drawImage(stamp.img, stamp.x, stamp.y, sw, sh);
+    ctx.restore();
   });
 
   // Draw drawing paths
@@ -767,6 +795,19 @@ preloadStamps.forEach((url, idx) => {
     });
 });
 
+// Function to update mode indicator
+function updateModeIndicator() {
+  if (!modeIndicator) return;
+
+  if (drawingEnabled) {
+    modeIndicator.textContent = "DRAWING MODE";
+  } else if (selectedStamp) {
+    modeIndicator.textContent = "STAMP MODE";
+  } else {
+    modeIndicator.textContent = "";
+  }
+}
+
 // Listen for stamp selection
 if (stampOptions) {
   stampOptions.addEventListener("click", (e) => {
@@ -780,7 +821,17 @@ if (stampOptions) {
         selectedStamp = null;
       } else if (stampIndex >= 0 && stampImages[stampIndex]) {
         selectedStamp = stampImages[stampIndex];
+        playJingle();
+        // Disable drawing mode if enabled
+        if (drawingEnabled) {
+          drawingEnabled = false;
+          if (toggleDrawingBtn) {
+            toggleDrawingBtn.textContent = "Enable Drawing";
+          }
+          preview.style.cursor = "";
+        }
       }
+      updateModeIndicator();
     }
   });
 }
@@ -806,6 +857,7 @@ let stampClickHandler = (e) => {
     scale: stampScale,
   });
 
+  playJingle();
   drawPreview();
 };
 
@@ -830,6 +882,7 @@ let currentPath = [];
 
 const toggleDrawingBtn = document.getElementById("toggleDrawing");
 const undoDrawingBtn = document.getElementById("undoDrawing");
+const clearAllBtn = document.getElementById("clearAll");
 
 if (toggleDrawingBtn) {
   toggleDrawingBtn.addEventListener("click", () => {
@@ -840,10 +893,18 @@ if (toggleDrawingBtn) {
 
     if (drawingEnabled) {
       preview.style.cursor = "crosshair";
+      // Deselect any selected stamp
+      if (selectedStamp) {
+        selectedStamp = null;
+        // Uncheck all stamp radio buttons
+        const stampRadios = document.querySelectorAll('input[name="stamp"]');
+        stampRadios.forEach((radio) => (radio.checked = false));
+      }
     } else {
       preview.style.cursor = "";
       preview.classList.remove("can-drag");
     }
+    updateModeIndicator();
   });
 }
 
@@ -853,6 +914,15 @@ if (undoDrawingBtn) {
       drawingPaths.pop();
       drawPreview();
     }
+  });
+}
+
+if (clearAllBtn) {
+  clearAllBtn.addEventListener("click", () => {
+    placedStamps = [];
+    drawingPaths = [];
+    currentPath = [];
+    drawPreview();
   });
 }
 
@@ -866,6 +936,15 @@ preview.addEventListener("mousedown", (e) => {
 
   isDrawing = true;
   currentPath = [{ x, y }];
+
+  // Play sleigh bells sound on loop while drawing
+  if (audioEnabled && sleighBells) {
+    sleighBells.currentTime = 0;
+    sleighBells
+      .play()
+      .catch((err) => console.log("Sleigh bells play prevented:", err));
+  }
+
   e.stopPropagation();
 });
 
@@ -923,5 +1002,12 @@ window.addEventListener("mouseup", () => {
   }
   currentPath = [];
   isDrawing = false;
+
+  // Stop sleigh bells sound when drawing stops
+  if (sleighBells) {
+    sleighBells.pause();
+    sleighBells.currentTime = 0;
+  }
+
   drawPreview();
 });

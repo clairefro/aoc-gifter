@@ -214,11 +214,19 @@ ${stampsHtml}
           </div>
           <div class="help">Click "Enable Drawing" to draw on the canvas</div>
         </div>
+
+        <div class="panel">
+          <h2>Clear</h2>
+          <div class="row">
+            <button id="clearAll">Clear All Drawings and Stamps</button>
+          </div>
+        </div>
       </section>
     </div>
 
     <div style="flex: 2;">
       <section class="canvas-area">
+        <div id="modeIndicator" style="color: var(--muted); font-size: 14px; margin-bottom: 8px; text-align: center; min-height: 22px;"></div>
         <canvas id="preview" width="600" height="700"></canvas>
         <div class="help">Drag the head and merch on the canvas to position. Use the sliders to resize and rotate.</div>
         <div style="text-align: center; margin-top: 20px;">
@@ -234,6 +242,14 @@ ${stampsHtml}
 
   <audio id="bgMusic" loop>
     <source src="./assets/sound/Nullsleep - silent night.mp3" type="audio/mpeg">
+  </audio>
+  
+  <audio id="jingleSound">
+    <source src="./assets/sound/jingle.mp3" type="audio/mpeg">
+  </audio>
+  
+  <audio id="sleighBells" loop>
+    <source src="./assets/sound/sleigh-bells.mp3" type="audio/mpeg">
   </audio>
 
   <script src="./preload.js"></script>
@@ -280,6 +296,11 @@ if (bgMusic && audioToggle) {
     
     // Save preference to localStorage
     localStorage.setItem('aocAudioEnabled', audioEnabled);
+    
+    // Update audioEnabled in app.js scope
+    if (window.updateAudioEnabled) {
+      window.updateAudioEnabled(audioEnabled);
+    }
     
     if (audioEnabled) {
       bgMusic.play().catch(err => console.log('Audio play prevented:', err));

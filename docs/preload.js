@@ -1,5 +1,5 @@
 window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-globe.png","assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-globe.png","assets/merch/pullover-santa.png","assets/merch/t-10.png","assets/merch/t-globe.png","assets/merch/t-santa.png","assets/merch/tank-globe.png"];
-window.PRELOAD_STAMP_URLS = ["assets/stamps/bag-globe.png","assets/stamps/star.png","assets/stamps/tumbler.png"];
+window.PRELOAD_STAMP_URLS = ["assets/stamps/aoc-hat-rr.png","assets/stamps/bag-globe.png","assets/stamps/star.png","assets/stamps/tumbler.png"];
 
 // Play background music on user interaction
 const bgMusic = document.getElementById('bgMusic');
@@ -27,6 +27,11 @@ if (bgMusic && audioToggle) {
     
     // Save preference to localStorage
     localStorage.setItem('aocAudioEnabled', audioEnabled);
+    
+    // Update audioEnabled in app.js scope
+    if (window.updateAudioEnabled) {
+      window.updateAudioEnabled(audioEnabled);
+    }
     
     if (audioEnabled) {
       bgMusic.play().catch(err => console.log('Audio play prevented:', err));

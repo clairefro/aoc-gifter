@@ -36,8 +36,9 @@ main {
   padding: 20px;
 }
 .controls {
-  width: 30%;
+  flex: 1;
   min-width: 300px;
+  max-width: 600px;
   max-height: 750px;
   overflow-y: scroll;
 }
@@ -112,11 +113,29 @@ input[type="file"].flicker {
 }
 .bg-options {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 8px;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+@media (max-width: 1600px) {
+  .bg-options {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1400px) {
+  .bg-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .bg-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 .bg-options li {
   display: flex;
@@ -239,7 +258,7 @@ button:hover {
   box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (pointer: coarse) {
   header,
   main,
   footer {
