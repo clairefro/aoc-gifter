@@ -426,6 +426,7 @@ function drawPreview() {
 // Consolidated dragging handler - checks top layer first (merch), then bottom (avatar)
 preview.addEventListener("mousedown", (e) => {
   if (drawingEnabled) return; // Skip dragging if drawing mode is enabled
+  if (selectedStamp) return; // Skip dragging if stamp is selected
 
   const rect = preview.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -668,7 +669,7 @@ preview.addEventListener("mousedown", (e) => {
     ) {
       merchDragging = true;
       merchDragOffset.x = x - merchPos.x;
-      merchDragOffset.y = x - merchPos.y;
+      merchDragOffset.y = y - merchPos.y;
       return;
     }
   }

@@ -201,13 +201,13 @@ input[type="range"]::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--yellow);
+  background: var(--green);
   cursor: pointer;
-  border: 2px solid var(--yellow);
+  border: 2px solid var(--green);
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  background: var(--yellow-bright);
-  box-shadow: 0 0 8px rgba(255, 255, 102, 0.5);
+  background: #66ff44;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
 }
 input[type="range"]::-moz-range-track {
   background: var(--border-light);
@@ -218,13 +218,13 @@ input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--yellow);
+  background: var(--green);
   cursor: pointer;
-  border: 2px solid var(--yellow);
+  border: 2px solid var(--green);
 }
 input[type="range"]::-moz-range-thumb:hover {
-  background: var(--yellow-bright);
-  box-shadow: 0 0 8px rgba(255, 255, 102, 0.5);
+  background: #66ff44;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
 }
 button {
   background: transparent;
