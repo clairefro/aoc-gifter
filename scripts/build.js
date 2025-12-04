@@ -269,7 +269,7 @@ let audioEnabled = localStorage.getItem('aocAudioEnabled') !== 'false';
 
 if (bgMusic && audioToggle) {
   // Set initial button state based on saved preference
-  audioToggle.textContent = audioEnabled ? '🔊 Nullsleep - silent night' : '🔇 Sound Off';
+  audioToggle.textContent = audioEnabled ? '🔊 Nullsleep - silent night' : '🔇 Sound is Off';
   
   const playMusic = () => {
     if (audioEnabled) {
