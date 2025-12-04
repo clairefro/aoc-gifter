@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/build.js",
+    "clean": "rm -rf docs",
+    "build": "npm run clean && node scripts/build.js",
     "dev": "npm run build && live-server docs --port=8000 --open=./index.html",
     "start": "npm run build && live-server public --port=8000 --open=./index.html",
     "test": "echo \"Error: no test specified\" && exit 1"

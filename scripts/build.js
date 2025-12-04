@@ -147,7 +147,6 @@ const html = `<!doctype html>
           </div>
           <div class="row">
             <button id="resetFg">Reset Head</button>
-            <button id="exportBtn">Export PNG</button>
           </div>
         </div>
 

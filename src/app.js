@@ -10,8 +10,6 @@ const scaleVal = document.getElementById("scaleVal");
 const rotationEl = document.getElementById("rotation");
 const rotationVal = document.getElementById("rotationVal");
 const resetFgBtn = document.getElementById("resetFg");
-const exportBtn = document.getElementById("exportBtn");
-let useAIRemoval = false;
 
 const merchContainer = document.getElementById("merchOptions");
 const merchScaleEl = document.getElementById("merchScale");
@@ -454,6 +452,53 @@ window.addEventListener("mousemove", (e) => {
 });
 window.addEventListener("mouseup", () => {
   dragging = false;
+  preview.classList.remove("can-drag");
+});
+
+// Show move cursor when hovering over draggable items
+preview.addEventListener("mousemove", (e) => {
+  if (dragging || merchDragging) return;
+
+  const rect = preview.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  let canDrag = false;
+
+  // Check merch first (top layer)
+  const merch = merchImages[merchSelected];
+  if (merch) {
+    const mw = merch.width * merchScale;
+    const mh = merch.height * merchScale;
+    if (
+      x >= merchPos.x &&
+      x <= merchPos.x + mw &&
+      y >= merchPos.y &&
+      y <= merchPos.y + mh
+    ) {
+      canDrag = true;
+    }
+  }
+
+  // Then check avatar (bottom layer)
+  if (!canDrag && processedFgCanvas) {
+    const fw = processedFgCanvas.width * fgScale;
+    const fh = processedFgCanvas.height * fgScale;
+    if (
+      x >= fgPos.x &&
+      x <= fgPos.x + fw &&
+      y >= fgPos.y &&
+      y <= fgPos.y + fh
+    ) {
+      canDrag = true;
+    }
+  }
+
+  if (canDrag) {
+    preview.classList.add("can-drag");
+  } else {
+    preview.classList.remove("can-drag");
+  }
 });
 
 // touch - check merch first, then avatar

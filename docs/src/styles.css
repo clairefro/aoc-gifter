@@ -101,6 +101,10 @@ input[type="file"].flicker {
   border: 1px solid #bbb;
   border-radius: 6px;
   background: #ddd;
+  cursor: default;
+}
+#preview.can-drag {
+  cursor: move;
 }
 .download-btn {
   margin-top: 20px;
