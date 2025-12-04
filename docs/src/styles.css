@@ -240,10 +240,21 @@ button:hover {
 }
 
 @media (max-width: 900px) {
-  main {
-    flex-direction: column;
+  header,
+  main,
+  footer {
+    display: none !important;
   }
-  .controls {
-    width: 100%;
+
+  body::before {
+    content: "Best viewed on a desktop computer";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;
+    color: var(--text);
   }
 }
