@@ -1,4 +1,4 @@
-window.PRELOAD_MERCH_URLS = ["assets/merch/long-t-500.png","assets/merch/t-500.png"];
+window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-santa-500.png","assets/merch/t-10.png","assets/merch/t-santa.png"];
 
 // Function to draw the canvas background
 const drawBackground = (ctx, canvas) => {
@@ -74,7 +74,7 @@ let audioEnabled = localStorage.getItem('aocAudioEnabled') !== 'false';
 
 if (bgMusic && audioToggle) {
   // Set initial button state based on saved preference
-  audioToggle.textContent = audioEnabled ? '🔊 Nullsleep - silent night' : '🔇 Sound Off';
+  audioToggle.textContent = audioEnabled ? '🔊 Nullsleep - silent night' : '🔇 Sound is Off';
   
   const playMusic = () => {
     if (audioEnabled) {
@@ -103,4 +103,16 @@ if (bgMusic && audioToggle) {
   
   document.addEventListener('click', playMusic);
   document.addEventListener('keydown', playMusic);
+}
+
+// Add flicker effect to file input if no avatar chosen
+const fgFileInput = document.getElementById('fgFile');
+if (fgFileInput) {
+  // Start with flicker
+  fgFileInput.classList.add('flicker');
+  
+  // Remove flicker when file is chosen
+  fgFileInput.addEventListener('change', () => {
+    fgFileInput.classList.remove('flicker');
+  });
 }

@@ -3,12 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AOC Gifter — Editor</title>
+  <meta name="description" content="AoC gift giving for the unemployed" />
+  <title>AoC Gifter — Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/styles.css" />
 </head>
 <body>
   <header>
-    <h1>AOC Gifter</h1>
+    <h1>AoC Gifter</h1>
+    <p style="margin: 8px 0 0 0; font-size: 14px; color: #666;">If you're employed, consider buying <a href="https://cottonbureau.com/people/advent-of-code" target="_blank" rel="noopener noreferrer" style="color: #007bff;">real merch</a></p>
     <button id="audioToggle" style="position: absolute; top: 20px; right: 20px; padding: 8px 16px; cursor: pointer; font-size: 14px;">🔊 Sound On</button>
   </header>
   <main style="display: flex;">
@@ -42,15 +47,43 @@
 
       <li>
         <label>
-          <input type="radio" name="merch" value="assets/merch/long-t-500.png" checked />
-          <img src="assets/merch/long-t-500.png" alt="merch-0" />
+          <input type="radio" name="merch" value="assets/merch/hoodie-santa.png" checked />
+          <img src="assets/merch/hoodie-santa.png" alt="merch-0" />
         </label>
       </li>
 
       <li>
         <label>
-          <input type="radio" name="merch" value="assets/merch/t-500.png"  />
-          <img src="assets/merch/t-500.png" alt="merch-1" />
+          <input type="radio" name="merch" value="assets/merch/long-t-10.png"  />
+          <img src="assets/merch/long-t-10.png" alt="merch-1" />
+        </label>
+      </li>
+
+      <li>
+        <label>
+          <input type="radio" name="merch" value="assets/merch/onesie-santa.png"  />
+          <img src="assets/merch/onesie-santa.png" alt="merch-2" />
+        </label>
+      </li>
+
+      <li>
+        <label>
+          <input type="radio" name="merch" value="assets/merch/pullover-santa-500.png"  />
+          <img src="assets/merch/pullover-santa-500.png" alt="merch-3" />
+        </label>
+      </li>
+
+      <li>
+        <label>
+          <input type="radio" name="merch" value="assets/merch/t-10.png"  />
+          <img src="assets/merch/t-10.png" alt="merch-4" />
+        </label>
+      </li>
+
+      <li>
+        <label>
+          <input type="radio" name="merch" value="assets/merch/t-santa.png"  />
+          <img src="assets/merch/t-santa.png" alt="merch-5" />
         </label>
       </li>
           </ul>

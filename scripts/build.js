@@ -113,12 +113,17 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AOC Gifter — Editor</title>
+  <meta name="description" content="AoC gift giving for the unemployed" />
+  <title>AoC Gifter — Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/styles.css" />
 </head>
 <body>
   <header>
-    <h1>AOC Gifter</h1>
+    <h1>(Unofficial) AoC Gifter</h1>
+    <p style="margin: 8px 0 0 0; font-size: 14px; color: #666;">If you're employed, consider buying <a href="https://cottonbureau.com/people/advent-of-code" target="_blank" rel="noopener noreferrer" style="color: #007bff;">real merch</a></p>
     <button id="audioToggle" style="position: absolute; top: 20px; right: 20px; padding: 8px 16px; cursor: pointer; font-size: 14px;">🔊 Sound On</button>
   </header>
   <main style="display: flex;">
@@ -298,6 +303,18 @@ if (bgMusic && audioToggle) {
   
   document.addEventListener('click', playMusic);
   document.addEventListener('keydown', playMusic);
+}
+
+// Add flicker effect to file input if no avatar chosen
+const fgFileInput = document.getElementById('fgFile');
+if (fgFileInput) {
+  // Start with flicker
+  fgFileInput.classList.add('flicker');
+  
+  // Remove flicker when file is chosen
+  fgFileInput.addEventListener('change', () => {
+    fgFileInput.classList.remove('flicker');
+  });
 }`;
 
 const preloadJsPath = path.join(docsDir, "preload.js");
