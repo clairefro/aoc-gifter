@@ -203,6 +203,17 @@ ${stampsHtml}
             <button id="undoStamp">Undo Last Stamp</button>
           </div>
         </div>
+
+        <div class="panel">
+          <h2>Drawing</h2>
+          <div class="row">
+            <button id="toggleDrawing">Enable Drawing</button>
+          </div>
+          <div class="row">
+            <button id="undoDrawing">Undo Last Drawing</button>
+          </div>
+          <div class="help">Click "Enable Drawing" to draw on the canvas</div>
+        </div>
       </section>
     </div>
 

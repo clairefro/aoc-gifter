@@ -384,12 +384,49 @@ function drawPreview() {
     ctx.drawImage(stamp.img, stamp.x, stamp.y, sw, sh);
   });
 
+  // Draw drawing paths
+  if (drawingPaths.length > 0) {
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 3;
+
+    drawingPaths.forEach((path) => {
+      if (path.length < 2) return;
+
+      // Draw white glow
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+      ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(path[0].x, path[0].y);
+      for (let i = 1; i < path.length; i++) {
+        ctx.lineTo(path[i].x, path[i].y);
+      }
+      ctx.stroke();
+
+      // Draw yellow line on top
+      ctx.strokeStyle = "#ffff66";
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.moveTo(path[0].x, path[0].y);
+      for (let i = 1; i < path.length; i++) {
+        ctx.lineTo(path[i].x, path[i].y);
+      }
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  }
+
   // Draw text
   drawText(ctx);
 }
 
 // Consolidated dragging handler - checks top layer first (merch), then bottom (avatar)
 preview.addEventListener("mousedown", (e) => {
+  if (drawingEnabled) return; // Skip dragging if drawing mode is enabled
+
   const rect = preview.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
@@ -440,7 +477,7 @@ window.addEventListener("mouseup", () => {
 
 // Show move cursor when hovering over draggable items
 preview.addEventListener("mousemove", (e) => {
-  if (dragging || merchDragging) return;
+  if (dragging || merchDragging || drawingEnabled) return;
 
   const rect = preview.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -749,6 +786,7 @@ if (stampOptions) {
 
 // Place stamp on canvas click
 let stampClickHandler = (e) => {
+  if (drawingEnabled) return; // Skip stamping if drawing mode is enabled
   if (!selectedStamp) return;
 
   const rect = preview.getBoundingClientRect();
@@ -782,3 +820,107 @@ if (undoStampBtn) {
     }
   });
 }
+
+// ========== DRAWING ==========
+let drawingEnabled = false;
+let isDrawing = false;
+let drawingPaths = []; // Array of paths, each path is an array of {x, y}
+let currentPath = [];
+
+const toggleDrawingBtn = document.getElementById("toggleDrawing");
+const undoDrawingBtn = document.getElementById("undoDrawing");
+
+if (toggleDrawingBtn) {
+  toggleDrawingBtn.addEventListener("click", () => {
+    drawingEnabled = !drawingEnabled;
+    toggleDrawingBtn.textContent = drawingEnabled
+      ? "Disable Drawing"
+      : "Enable Drawing";
+
+    if (drawingEnabled) {
+      preview.style.cursor = "crosshair";
+    } else {
+      preview.style.cursor = "";
+      preview.classList.remove("can-drag");
+    }
+  });
+}
+
+if (undoDrawingBtn) {
+  undoDrawingBtn.addEventListener("click", () => {
+    if (drawingPaths.length > 0) {
+      drawingPaths.pop();
+      drawPreview();
+    }
+  });
+}
+
+// Drawing event handlers
+preview.addEventListener("mousedown", (e) => {
+  if (!drawingEnabled) return;
+
+  const rect = preview.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  isDrawing = true;
+  currentPath = [{ x, y }];
+  e.stopPropagation();
+});
+
+preview.addEventListener("mousemove", (e) => {
+  if (!drawingEnabled || !isDrawing) return;
+
+  const rect = preview.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  currentPath.push({ x, y });
+
+  // Draw temporary path in real-time
+  drawPreview();
+
+  // Draw current path being drawn
+  if (currentPath.length > 1) {
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 3;
+
+    // Draw white glow
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+    ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.moveTo(currentPath[0].x, currentPath[0].y);
+    for (let i = 1; i < currentPath.length; i++) {
+      ctx.lineTo(currentPath[i].x, currentPath[i].y);
+    }
+    ctx.stroke();
+
+    // Draw yellow line on top
+    ctx.strokeStyle = "#ffff66";
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.moveTo(currentPath[0].x, currentPath[0].y);
+    for (let i = 1; i < currentPath.length; i++) {
+      ctx.lineTo(currentPath[i].x, currentPath[i].y);
+    }
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  e.stopPropagation();
+});
+
+window.addEventListener("mouseup", () => {
+  if (!drawingEnabled || !isDrawing) return;
+
+  if (currentPath.length > 1) {
+    drawingPaths.push([...currentPath]);
+  }
+  currentPath = [];
+  isDrawing = false;
+  drawPreview();
+});

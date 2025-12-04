@@ -38,6 +38,21 @@ main {
 .controls {
   width: 30%;
   min-width: 300px;
+  max-height: 750px;
+  overflow-y: scroll;
+}
+.controls::-webkit-scrollbar {
+  width: 12px;
+}
+.controls::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+.controls::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 6px;
+}
+.controls::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }
 .panel {
   background: var(--panel);
@@ -76,6 +91,7 @@ input[type="file"]::file-selector-button {
   padding: 4px 12px 4px 8px;
   margin-right: 12px;
   cursor: pointer;
+  font-family: "Source Code Pro", monospace;
 }
 input[type="file"]:hover {
   background: var(--green-glow);
