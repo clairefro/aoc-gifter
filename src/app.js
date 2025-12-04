@@ -696,6 +696,19 @@ preloadMerch.forEach((url, idx) => {
     });
 });
 
+// Listen for merch selection changes from radio buttons
+if (merchContainer) {
+  merchContainer.addEventListener("change", (e) => {
+    if (e.target.name === "merch") {
+      const merchUrl = e.target.value;
+      const merchIndex = preloadMerch.indexOf(merchUrl);
+      if (merchIndex >= 0) {
+        selectMerch(merchIndex);
+      }
+    }
+  });
+}
+
 // ========== STAMPS ==========
 let stampImages = [];
 let selectedStamp = null;
@@ -722,7 +735,7 @@ if (stampOptions) {
     if (e.target.type === "radio" && e.target.name === "stamp") {
       const stampUrl = e.target.value;
       const stampIndex = preloadStamps.indexOf(stampUrl);
-      
+
       // If clicking the already selected stamp, deselect it
       if (e.target.checked && selectedStamp === stampImages[stampIndex]) {
         e.target.checked = false;
