@@ -3,7 +3,12 @@
   --panel: #1e1e3f;
   --muted: #999;
   --border: #333;
+  --border-light: #555;
   --text: #cccccc;
+  --green: #39ff14;
+  --yellow: #ffff66;
+  --green-glow: rgba(57, 255, 20, 0.1);
+  --yellow-bright: #ffff99;
 }
 * {
   box-sizing: border-box;
@@ -56,36 +61,24 @@ input[type="file"] {
   width: 100%;
   padding: 8px 12px;
   background: transparent;
-  color: #39ff14;
-  border: 2px solid #39ff14;
+  color: var(--green);
+  border: 2px solid var(--green);
   border-radius: 4px;
   cursor: pointer;
-  font-family: "Source Code Pro", monospace;
   transition: all 0.2s;
-  box-sizing: border-box;
 }
-input[type="file"]::-webkit-file-upload-button {
-  background: transparent;
-  color: #39ff14;
-  border: none;
-  border-right: 1px solid #39ff14;
-  padding: 4px 12px 4px 8px;
-  margin-right: 12px;
-  cursor: pointer;
-  font-family: "Source Code Pro", monospace;
-}
+input[type="file"]::-webkit-file-upload-button,
 input[type="file"]::file-selector-button {
   background: transparent;
-  color: #39ff14;
+  color: var(--green);
   border: none;
-  border-right: 1px solid #39ff14;
+  border-right: 1px solid var(--green);
   padding: 4px 12px 4px 8px;
   margin-right: 12px;
   cursor: pointer;
-  font-family: "Source Code Pro", monospace;
 }
 input[type="file"]:hover {
-  background: rgba(57, 255, 20, 0.1);
+  background: var(--green-glow);
   box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 input[type="file"].flicker {
@@ -125,13 +118,13 @@ input[type="file"].flicker {
   transition: all 0.2s;
 }
 .bg-options label:hover {
-  border-color: #39ff14;
+  border-color: var(--green);
 }
 .bg-options input[type="radio"] {
   display: none;
 }
 .bg-options label:has(input[type="radio"]:checked) {
-  border-color: #39ff14;
+  border-color: var(--green);
   background: #5a6a5a;
 }
 .bg-options img {
@@ -139,26 +132,7 @@ input[type="file"].flicker {
   height: 80px;
   object-fit: contain;
 }
-.bg-slot {
-  border: 1px dashed #ccc;
-  border-radius: 6px;
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  background: #fafafa;
-}
-.bg-slot img {
-  max-width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-.bg-slot button {
-  font-size: 12px;
-  padding: 6px 8px;
-}
+
 .canvas-area {
   flex: 1;
   display: flex;
@@ -168,32 +142,14 @@ input[type="file"].flicker {
   overflow: hidden;
 }
 #preview {
-  border: 1px solid #bbb;
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background: #ddd;
   cursor: default;
 }
 #preview.can-drag {
   cursor: move;
 }
-.download-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.download-btn:hover {
-  background-color: #0056b3;
-}
 .help {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 13px;
-}
-.note {
   margin-top: 8px;
   color: var(--muted);
   font-size: 13px;
@@ -210,12 +166,12 @@ input[type="range"] {
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  background: #555;
+  background: var(--border-light);
   height: 4px;
   border-radius: 2px;
 }
 input[type="range"]::-webkit-slider-track {
-  background: #555;
+  background: var(--border-light);
   height: 4px;
   border-radius: 2px;
 }
@@ -225,16 +181,16 @@ input[type="range"]::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ffff66;
+  background: var(--yellow);
   cursor: pointer;
-  border: 2px solid #ffff66;
+  border: 2px solid var(--yellow);
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  background: #ffff99;
+  background: var(--yellow-bright);
   box-shadow: 0 0 8px rgba(255, 255, 102, 0.5);
 }
 input[type="range"]::-moz-range-track {
-  background: #555;
+  background: var(--border-light);
   height: 4px;
   border-radius: 2px;
 }
@@ -242,35 +198,25 @@ input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ffff66;
+  background: var(--yellow);
   cursor: pointer;
-  border: 2px solid #ffff66;
+  border: 2px solid var(--yellow);
 }
 input[type="range"]::-moz-range-thumb:hover {
-  background: #ffff99;
+  background: var(--yellow-bright);
   box-shadow: 0 0 8px rgba(255, 255, 102, 0.5);
 }
 button {
   background: transparent;
-  color: #39ff14;
-  border: 2px solid #39ff14;
+  color: var(--green);
+  border: 2px solid var(--green);
   padding: 8px 12px;
   border-radius: 4px;
-  font-family: "Source Code Pro", monospace;
   transition: all 0.2s;
 }
 button:hover {
-  background: rgba(57, 255, 20, 0.1);
+  background: var(--green-glow);
   box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
-}
-#audioToggle {
-  background: transparent !important;
-  color: #39ff14 !important;
-  border: 2px solid #39ff14 !important;
-}
-#audioToggle:hover {
-  background: rgba(57, 255, 20, 0.1) !important;
-  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
 }
 
 @media (max-width: 900px) {
