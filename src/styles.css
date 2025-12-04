@@ -68,6 +68,39 @@ input[type="file"].flicker {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.bg-options li {
+  display: flex;
+}
+.bg-options label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+.bg-options label:hover {
+  border-color: #007bff;
+}
+.bg-options input[type="radio"] {
+  display: none;
+}
+.bg-options label:has(input[type="radio"]:checked) {
+  border-color: #007bff;
+  background: #e7f3ff;
+}
+.bg-options img {
+  max-width: 100%;
+  height: 80px;
+  object-fit: contain;
 }
 .bg-slot {
   border: 1px dashed #ccc;

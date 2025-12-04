@@ -1,4 +1,4 @@
-window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-santa-500.png","assets/merch/t-10.png","assets/merch/t-santa.png"];
+window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-santa.png","assets/merch/t-10.png","assets/merch/t-santa.png"];
 
 // Function to draw the canvas background
 const drawBackground = (ctx, canvas) => {
@@ -23,7 +23,7 @@ const drawText = (ctx) => {
 // Function to draw the merch image with glow
 const drawMerch = (ctx, canvas, merchImage) => {
   const centerX = (canvas.width - merchImage.width) / 2;
-  const centerY = (canvas.height - merchImage.height) / 2;
+  const centerY = (canvas.height - merchImage.height) / 2 + canvas.height * 0.15;
   
   // Draw white glow behind merch
   ctx.save();

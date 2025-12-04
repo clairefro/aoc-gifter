@@ -20,7 +20,7 @@ function gatherFiles(candidateDirs) {
   const out = [];
   for (const dir of candidateDirs) {
     try {
-      const items = fs.readdirSync(dir);
+      const items = fs.readdirSync(dir).sort();
       for (const f of items) {
         if (!/\.(png|jpg|jpeg|webp|avif|mp3)$/i.test(f)) continue;
         if (seen.has(f)) continue;
@@ -92,6 +92,18 @@ try {
   console.error("Failed to copy app.js", err.message);
 }
 
+// Copy favicon.ico to docs/assets directory
+const faviconSrc = path.join(root, "src", "assets", "favicon.ico");
+const faviconDest = path.join(docsAssetsDir, "favicon.ico");
+try {
+  if (fs.existsSync(faviconSrc)) {
+    fs.copyFileSync(faviconSrc, faviconDest);
+    console.log("Copied", faviconSrc, "to", faviconDest);
+  }
+} catch (err) {
+  console.error("Failed to copy favicon.ico", err.message);
+}
+
 // Automatically select the first merch item in the HTML
 const merchHtml = docsMerch
   .map(
@@ -115,6 +127,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="AoC gift giving for the unemployed" />
   <title>AoC Gifter — Editor</title>
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
@@ -224,7 +237,7 @@ const drawText = (ctx) => {
 // Function to draw the merch image with glow
 const drawMerch = (ctx, canvas, merchImage) => {
   const centerX = (canvas.width - merchImage.width) / 2;
-  const centerY = (canvas.height - merchImage.height) / 2;
+  const centerY = (canvas.height - merchImage.height) / 2 + canvas.height * 0.15;
   
   // Draw white glow behind merch
   ctx.save();

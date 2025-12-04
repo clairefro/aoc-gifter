@@ -635,7 +635,19 @@ window.addEventListener("mouseup", () => {
 // Prevent context menu on right click
 preview.addEventListener("contextmenu", (e) => e.preventDefault());
 
-// Remove references to assets/backgrounds
-// Removed background gallery initialization
+// Load merch images from radio buttons in HTML (already sorted)
 const preloadMerch = window.PRELOAD_MERCH_URLS || [];
-populateGallery(merchContainer, preloadMerch, merchImages, selectMerch);
+merchImages.length = 0;
+preloadMerch.forEach((url, idx) => {
+  loadImageFromUrl(url)
+    .then((img) => {
+      merchImages[idx] = img;
+      // Auto-select first merch when it loads
+      if (idx === 0) {
+        selectMerch(0);
+      }
+    })
+    .catch(() => {
+      // skip if fails
+    });
+});
