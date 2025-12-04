@@ -109,12 +109,28 @@ try {
   console.error("Failed to copy favicon.ico", err.message);
 }
 
+// Helper function to humanify filename
+function humanifyFilename(filepath) {
+  const filename = path.basename(filepath, path.extname(filepath));
+  return filename
+    .split('-')
+    .map(word => {
+      // Special case for "aoc"
+      if (word.toLowerCase() === 'aoc') {
+        return 'AoC';
+      }
+      // Capitalize first letter of each word
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 // Automatically select the first merch item in the HTML
 const merchHtml = docsMerch
   .map(
     (p, i) => `
       <li>
-        <label>
+        <label title="${humanifyFilename(p)}">
           <input type="radio" name="merch" value="${p}" ${
       i === 0 ? "checked" : ""
     } />
@@ -128,7 +144,7 @@ const stampsHtml = docsStamps
   .map(
     (p, i) => `
       <li>
-        <label>
+        <label title="${humanifyFilename(p)}">
           <input type="radio" name="stamp" value="${p}" />
           <img src="${p}" alt="stamp-${i}" />
         </label>
