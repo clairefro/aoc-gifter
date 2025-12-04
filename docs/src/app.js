@@ -377,6 +377,13 @@ function drawPreview() {
     ctx.drawImage(merch, merchPos.x, merchPos.y, mw, mh);
   }
 
+  // Draw stamps
+  placedStamps.forEach((stamp) => {
+    const sw = stamp.img.width * stamp.scale;
+    const sh = stamp.img.height * stamp.scale;
+    ctx.drawImage(stamp.img, stamp.x, stamp.y, sw, sh);
+  });
+
   // Draw text
   drawText(ctx);
 }
@@ -688,3 +695,77 @@ preloadMerch.forEach((url, idx) => {
       // skip if fails
     });
 });
+
+// ========== STAMPS ==========
+let stampImages = [];
+let selectedStamp = null;
+let placedStamps = []; // Array of {img, x, y, scale}
+
+const stampOptions = document.getElementById("stampOptions");
+const undoStampBtn = document.getElementById("undoStamp");
+
+// Load stamp images
+const preloadStamps = window.PRELOAD_STAMP_URLS || [];
+preloadStamps.forEach((url, idx) => {
+  loadImageFromUrl(url)
+    .then((img) => {
+      stampImages[idx] = img;
+    })
+    .catch(() => {
+      // skip if fails
+    });
+});
+
+// Listen for stamp selection
+if (stampOptions) {
+  stampOptions.addEventListener("click", (e) => {
+    if (e.target.type === "radio" && e.target.name === "stamp") {
+      const stampUrl = e.target.value;
+      const stampIndex = preloadStamps.indexOf(stampUrl);
+      
+      // If clicking the already selected stamp, deselect it
+      if (e.target.checked && selectedStamp === stampImages[stampIndex]) {
+        e.target.checked = false;
+        selectedStamp = null;
+      } else if (stampIndex >= 0 && stampImages[stampIndex]) {
+        selectedStamp = stampImages[stampIndex];
+      }
+    }
+  });
+}
+
+// Place stamp on canvas click
+let stampClickHandler = (e) => {
+  if (!selectedStamp) return;
+
+  const rect = preview.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  // Place stamp centered on click position at 50% scale
+  const stampScale = 0.5;
+  const stampX = x - (selectedStamp.width * stampScale) / 2;
+  const stampY = y - (selectedStamp.height * stampScale) / 2;
+
+  placedStamps.push({
+    img: selectedStamp,
+    x: stampX,
+    y: stampY,
+    scale: stampScale,
+  });
+
+  drawPreview();
+};
+
+// Add stamp click handler with higher priority
+preview.addEventListener("click", stampClickHandler);
+
+// Undo last stamp
+if (undoStampBtn) {
+  undoStampBtn.addEventListener("click", () => {
+    if (placedStamps.length > 0) {
+      placedStamps.pop();
+      drawPreview();
+    }
+  });
+}

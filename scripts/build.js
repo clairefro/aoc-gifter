@@ -6,6 +6,7 @@ const root = process.cwd();
 const candidates = {
   merch: [path.join(root, "src", "assets", "merch")],
   sound: [path.join(root, "src", "assets", "sound")],
+  stamps: [path.join(root, "src", "assets", "stamps")],
 };
 
 const docsDir = path.join(root, "docs");
@@ -37,6 +38,7 @@ function gatherFiles(candidateDirs) {
 // collect files
 const merchFiles = gatherFiles(candidates.merch);
 const soundFiles = gatherFiles(candidates.sound);
+const stampFiles = gatherFiles(candidates.stamps);
 
 // prepare docs folders and copy files into docs/assets/merch
 ensureDir(docsAssetsDir);
@@ -44,6 +46,8 @@ const docsMerchDir = path.join(docsAssetsDir, "merch");
 ensureDir(docsMerchDir);
 const docsSoundDir = path.join(docsAssetsDir, "sound");
 ensureDir(docsSoundDir);
+const docsStampsDir = path.join(docsAssetsDir, "stamps");
+ensureDir(docsStampsDir);
 
 function copyList(list, destDir) {
   const docsPaths = [];
@@ -69,6 +73,7 @@ function copyList(list, destDir) {
 
 const docsMerch = copyList(merchFiles, docsMerchDir);
 const docsSound = copyList(soundFiles, docsSoundDir);
+const docsStamps = copyList(stampFiles, docsStampsDir);
 
 // Ensure styles.css is copied to the docs directory
 const stylesSrc = path.join(root, "src", "styles.css");
@@ -114,6 +119,18 @@ const merchHtml = docsMerch
       i === 0 ? "checked" : ""
     } />
           <img src="${p}" alt="merch-${i}" />
+        </label>
+      </li>`
+  )
+  .join("\n");
+
+const stampsHtml = docsStamps
+  .map(
+    (p, i) => `
+      <li>
+        <label>
+          <input type="radio" name="stamp" value="${p}" />
+          <img src="${p}" alt="stamp-${i}" />
         </label>
       </li>`
   )
@@ -175,6 +192,17 @@ ${merchHtml}
             <input id="merchScale" type="range" min="0.1" max="3" step="0.01" value="1" />
           </div>
         </div>
+
+        <div class="panel">
+          <h2>Stamps</h2>
+          <ul id="stampOptions" class="bg-options">
+${stampsHtml}
+          </ul>
+          <div class="help">Select a stamp, then click on the canvas to place it</div>
+          <div class="row" style="margin-top: 12px;">
+            <button id="undoStamp">Undo Last Stamp</button>
+          </div>
+        </div>
       </section>
     </div>
 
@@ -213,6 +241,7 @@ try {
 
 // Update preload.js to ensure the blue background is consistently redrawn during merch selection
 const preloadJs = `window.PRELOAD_MERCH_URLS = ${JSON.stringify(docsMerch)};
+window.PRELOAD_STAMP_URLS = ${JSON.stringify(docsStamps)};
 
 // Function to draw the canvas background
 const drawBackground = (ctx, canvas) => {
@@ -311,7 +340,7 @@ if (bgMusic && audioToggle) {
       audioToggle.textContent = '🔊 Nullsleep - silent night';
     } else {
       bgMusic.pause();
-      audioToggle.textContent = '🔇 Sound Off';
+      audioToggle.textContent = '🔇 Sound is Off';
     }
   });
   

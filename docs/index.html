@@ -94,6 +94,30 @@
             <input id="merchScale" type="range" min="0.1" max="3" step="0.01" value="1" />
           </div>
         </div>
+
+        <div class="panel">
+          <h2>Stamps</h2>
+          <ul id="stampOptions" class="bg-options">
+
+      <li>
+        <label>
+          <input type="radio" name="stamp" value="assets/stamps/s.png" />
+          <img src="assets/stamps/s.png" alt="stamp-0" />
+        </label>
+      </li>
+
+      <li>
+        <label>
+          <input type="radio" name="stamp" value="assets/stamps/star.png" />
+          <img src="assets/stamps/star.png" alt="stamp-1" />
+        </label>
+      </li>
+          </ul>
+          <div class="help">Select a stamp, then click on the canvas to place it</div>
+          <div class="row" style="margin-top: 12px;">
+            <button id="undoStamp">Undo Last Stamp</button>
+          </div>
+        </div>
       </section>
     </div>
 
