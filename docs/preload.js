@@ -1,5 +1,5 @@
-window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-santa.png","assets/merch/t-10.png","assets/merch/t-santa.png"];
-window.PRELOAD_STAMP_URLS = ["assets/stamps/star.png"];
+window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-globe.png","assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-globe.png","assets/merch/pullover-santa.png","assets/merch/t-10.png","assets/merch/t-globe.png","assets/merch/t-santa.png","assets/merch/tank-globe.png"];
+window.PRELOAD_STAMP_URLS = ["assets/stamps/bag-globe.png","assets/stamps/star.png","assets/stamps/tumbler.png"];
 
 // Play background music on user interaction
 const bgMusic = document.getElementById('bgMusic');

@@ -48,11 +48,11 @@ main {
   background: var(--bg);
 }
 .controls::-webkit-scrollbar-thumb {
-  background: var(--border-light);
-  border-radius: 6px;
+  background: var(--green);
+  border-radius: 0;
 }
 .controls::-webkit-scrollbar-thumb:hover {
-  background: #666;
+  background: #66ff44;
 }
 .panel {
   background: var(--panel);
