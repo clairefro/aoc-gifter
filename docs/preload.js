@@ -1,5 +1,5 @@
 window.PRELOAD_MERCH_URLS = ["assets/merch/hoodie-santa.png","assets/merch/long-t-10.png","assets/merch/onesie-santa.png","assets/merch/pullover-santa.png","assets/merch/t-10.png","assets/merch/t-santa.png"];
-window.PRELOAD_STAMP_URLS = ["assets/stamps/s.png","assets/stamps/star.png"];
+window.PRELOAD_STAMP_URLS = ["assets/stamps/star.png"];
 
 // Function to draw the canvas background
 const drawBackground = (ctx, canvas) => {
