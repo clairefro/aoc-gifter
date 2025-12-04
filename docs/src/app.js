@@ -403,7 +403,7 @@ function drawPreview() {
   placedStamps.forEach((stamp) => {
     const sw = stamp.img.width * stamp.scale;
     const sh = stamp.img.height * stamp.scale;
-    
+
     // Draw white glow behind stamp
     ctx.save();
     ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
@@ -423,9 +423,9 @@ function drawPreview() {
       if (path.length < 2) return;
 
       // Draw white glow
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-      ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
-      ctx.shadowBlur = 10;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.shadowColor = "rgba(255, 255, 255, 1)";
+      ctx.shadowBlur = 20;
       ctx.beginPath();
       ctx.moveTo(path[0].x, path[0].y);
       for (let i = 1; i < path.length; i++) {
@@ -435,7 +435,8 @@ function drawPreview() {
 
       // Draw yellow line on top
       ctx.strokeStyle = "#ffff66";
-      ctx.shadowBlur = 0;
+      ctx.shadowColor = "#ffff66";
+      ctx.shadowBlur = 5;
       ctx.beginPath();
       ctx.moveTo(path[0].x, path[0].y);
       for (let i = 1; i < path.length; i++) {

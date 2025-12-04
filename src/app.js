@@ -403,7 +403,7 @@ function drawPreview() {
   placedStamps.forEach((stamp) => {
     const sw = stamp.img.width * stamp.scale;
     const sh = stamp.img.height * stamp.scale;
-    
+
     // Draw white glow behind stamp
     ctx.save();
     ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
