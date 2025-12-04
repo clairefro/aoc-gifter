@@ -132,21 +132,23 @@ const html = `<!doctype html>
         <div class="panel">
           <h2>Head</h2>
           <input id="fgFile" type="file" accept="image/png" />
-          <div class="row">
-            <label>Tolerance: <span id="tolVal">32</span></label>
-            <input id="tolerance" type="range" min="0" max="200" value="32" />
-          </div>
+          <div id="headControls" style="display: none;">
+            <div class="row">
+              <label>Tolerance: <span id="tolVal">32</span></label>
+              <input id="tolerance" type="range" min="0" max="200" value="32" />
+            </div>
 
-          <div class="row">
-            <label>Head Scale: <span id="scaleVal">1.00</span></label>
-            <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
-          </div>
-          <div class="row">
-            <label>Head Rotation: <span id="rotationVal">0</span>°</label>
-            <input id="rotation" type="range" min="0" max="360" step="1" value="0" />
-          </div>
-          <div class="row">
-            <button id="resetFg">Reset Head</button>
+            <div class="row">
+              <label>Head Scale: <span id="scaleVal">1.00</span></label>
+              <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
+            </div>
+            <div class="row">
+              <label>Head Rotation: <span id="rotationVal">0</span>°</label>
+              <input id="rotation" type="range" min="0" max="360" step="1" value="0" />
+            </div>
+            <div class="row">
+              <button id="resetFg">Reset Head</button>
+            </div>
           </div>
         </div>
 
@@ -306,13 +308,19 @@ if (bgMusic && audioToggle) {
 
 // Add flicker effect to file input if no avatar chosen
 const fgFileInput = document.getElementById('fgFile');
+const headControls = document.getElementById('headControls');
 if (fgFileInput) {
   // Start with flicker
   fgFileInput.classList.add('flicker');
   
-  // Remove flicker when file is chosen
-  fgFileInput.addEventListener('change', () => {
-    fgFileInput.classList.remove('flicker');
+  // Show head controls and remove flicker when file is chosen
+  fgFileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      fgFileInput.classList.remove('flicker');
+      if (headControls) {
+        headControls.style.display = 'block';
+      }
+    }
   });
 }`;
 

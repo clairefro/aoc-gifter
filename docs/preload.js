@@ -107,12 +107,18 @@ if (bgMusic && audioToggle) {
 
 // Add flicker effect to file input if no avatar chosen
 const fgFileInput = document.getElementById('fgFile');
+const headControls = document.getElementById('headControls');
 if (fgFileInput) {
   // Start with flicker
   fgFileInput.classList.add('flicker');
   
-  // Remove flicker when file is chosen
-  fgFileInput.addEventListener('change', () => {
-    fgFileInput.classList.remove('flicker');
+  // Show head controls and remove flicker when file is chosen
+  fgFileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      fgFileInput.classList.remove('flicker');
+      if (headControls) {
+        headControls.style.display = 'block';
+      }
+    }
   });
 }

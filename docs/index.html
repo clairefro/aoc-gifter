@@ -22,22 +22,23 @@
         <div class="panel">
           <h2>Head</h2>
           <input id="fgFile" type="file" accept="image/png" />
-          <div class="row">
-            <label>Tolerance: <span id="tolVal">32</span></label>
-            <input id="tolerance" type="range" min="0" max="200" value="32" />
-          </div>
+          <div id="headControls" style="display: none;">
+            <div class="row">
+              <label>Tolerance: <span id="tolVal">32</span></label>
+              <input id="tolerance" type="range" min="0" max="200" value="32" />
+            </div>
 
-          <div class="row">
-            <label>Head Scale: <span id="scaleVal">1.00</span></label>
-            <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
-          </div>
-          <div class="row">
-            <label>Head Rotation: <span id="rotationVal">0</span>°</label>
-            <input id="rotation" type="range" min="0" max="360" step="1" value="0" />
-          </div>
-          <div class="row">
-            <button id="resetFg">Reset Head</button>
-            <button id="exportBtn">Export PNG</button>
+            <div class="row">
+              <label>Head Scale: <span id="scaleVal">1.00</span></label>
+              <input id="scale" type="range" min="0.1" max="3" step="0.01" value="1" />
+            </div>
+            <div class="row">
+              <label>Head Rotation: <span id="rotationVal">0</span>°</label>
+              <input id="rotation" type="range" min="0" max="360" step="1" value="0" />
+            </div>
+            <div class="row">
+              <button id="resetFg">Reset Head</button>
+            </div>
           </div>
         </div>
 

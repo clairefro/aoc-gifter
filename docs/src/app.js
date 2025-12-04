@@ -1,4 +1,3 @@
-// New app script: left-side controls (avatar upload + merch), right-side preview
 const preview = document.getElementById("preview");
 const ctx = preview.getContext("2d");
 
@@ -10,8 +9,6 @@ const scaleVal = document.getElementById("scaleVal");
 const rotationEl = document.getElementById("rotation");
 const rotationVal = document.getElementById("rotationVal");
 const resetFgBtn = document.getElementById("resetFg");
-const exportBtn = document.getElementById("exportBtn");
-let useAIRemoval = false;
 
 const merchContainer = document.getElementById("merchOptions");
 const merchScaleEl = document.getElementById("merchScale");
@@ -276,66 +273,6 @@ if (exportCanvasBtn) {
     a.click();
   });
 }
-
-exportBtn.addEventListener("click", () => {
-  const out = document.createElement("canvas");
-  out.width = preview.width;
-  out.height = preview.height;
-  const g = out.getContext("2d");
-
-  // Draw blue background
-  g.fillStyle = "#0e1022";
-  g.fillRect(0, 0, out.width, out.height);
-
-  // draw avatar with glow (bottom layer)
-  if (processedFgCanvas) {
-    const dw = processedFgCanvas.width * fgScale;
-    const dh = processedFgCanvas.height * fgScale;
-
-    g.save();
-
-    // Apply rotation
-    g.translate(fgPos.x + dw / 2, fgPos.y + dh / 2);
-    g.rotate((fgRotation * Math.PI) / 180);
-    g.translate(-dw / 2, -dh / 2);
-
-    g.shadowColor = "rgba(255, 255, 255, 0.8)";
-    g.shadowBlur = 40;
-    g.shadowOffsetX = 0;
-    g.shadowOffsetY = 0;
-    g.drawImage(processedFgCanvas, 0, 0, dw, dh);
-
-    // Draw avatar on top (no shadow)
-    g.shadowColor = "transparent";
-    g.shadowBlur = 0;
-    g.drawImage(processedFgCanvas, 0, 0, dw, dh);
-
-    g.restore();
-  }
-
-  // draw merch with glow (top layer)
-  const merch = merchImages[merchSelected];
-  if (merch) {
-    const mw = merch.width * merchScale;
-    const mh = merch.height * merchScale;
-
-    g.save();
-    g.shadowColor = "rgba(255, 255, 255, 0.8)";
-    g.shadowBlur = 40;
-    g.shadowOffsetX = 0;
-    g.shadowOffsetY = 0;
-    g.drawImage(merch, merchPos.x, merchPos.y, mw, mh);
-    g.restore();
-    g.drawImage(merch, merchPos.x, merchPos.y, mw, mh);
-  } // Draw text
-  drawText(g);
-
-  const url = out.toDataURL("image/png");
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "merged.png";
-  a.click();
-});
 
 // Function to draw text with glow
 function drawText(context) {
