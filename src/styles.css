@@ -1,7 +1,9 @@
 :root {
-  --bg: #f6f8fa;
-  --panel: #fff;
-  --muted: #666;
+  --bg: #0f0f23;
+  --panel: #1e1e3f;
+  --muted: #999;
+  --border: #333;
+  --text: #cccccc;
 }
 * {
   box-sizing: border-box;
@@ -10,15 +12,16 @@
 body {
   margin: 0;
   background: var(--bg);
-  color: #111;
+  color: var(--text);
 }
 header {
   padding: 20px 24px;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid var(--border);
 }
 header h1 {
   margin: 0;
   font-size: 18px;
+  color: var(--text);
 }
 main {
   display: flex;
@@ -35,12 +38,13 @@ main {
   background: var(--panel);
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid #e6e6e6;
+  border: 1px solid var(--border);
   margin-bottom: 12px;
 }
 .panel h2 {
   margin: 0 0 8px 0;
   font-size: 14px;
+  color: var(--text);
 }
 .row {
   display: flex;
@@ -50,6 +54,39 @@ main {
 }
 input[type="file"] {
   width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  color: #39ff14;
+  border: 2px solid #39ff14;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Source Code Pro", monospace;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+input[type="file"]::-webkit-file-upload-button {
+  background: transparent;
+  color: #39ff14;
+  border: none;
+  border-right: 1px solid #39ff14;
+  padding: 4px 12px 4px 8px;
+  margin-right: 12px;
+  cursor: pointer;
+  font-family: "Source Code Pro", monospace;
+}
+input[type="file"]::file-selector-button {
+  background: transparent;
+  color: #39ff14;
+  border: none;
+  border-right: 1px solid #39ff14;
+  padding: 4px 12px 4px 8px;
+  margin-right: 12px;
+  cursor: pointer;
+  font-family: "Source Code Pro", monospace;
+}
+input[type="file"]:hover {
+  background: rgba(57, 255, 20, 0.1);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 input[type="file"].flicker {
   animation: flicker 1.5s ease-in-out infinite;
@@ -57,10 +94,10 @@ input[type="file"].flicker {
 @keyframes flicker {
   0%,
   100% {
-    outline: 2px solid transparent;
+    outline: 4px solid transparent;
   }
   50% {
-    outline: 2px solid #007bff;
+    outline: 4px solid #ffffff;
     outline-offset: 2px;
   }
 }
@@ -80,22 +117,22 @@ input[type="file"].flicker {
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border);
   border-radius: 6px;
   cursor: pointer;
   width: 100%;
-  background: #fafafa;
+  background: #4a4a5a;
   transition: all 0.2s;
 }
 .bg-options label:hover {
-  border-color: #007bff;
+  border-color: #39ff14;
 }
 .bg-options input[type="radio"] {
   display: none;
 }
 .bg-options label:has(input[type="radio"]:checked) {
-  border-color: #007bff;
-  background: #e7f3ff;
+  border-color: #39ff14;
+  background: #5a6a5a;
 }
 .bg-options img {
   max-width: 100%;
@@ -163,8 +200,77 @@ input[type="file"].flicker {
 }
 footer {
   padding: 12px 24px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
   color: var(--muted);
+}
+button,
+input[type="range"] {
+  cursor: pointer;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #555;
+  height: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-track {
+  background: #555;
+  height: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffff66;
+  cursor: pointer;
+  border: 2px solid #ffff66;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #ffff99;
+  box-shadow: 0 0 8px rgba(255, 255, 102, 0.5);
+}
+input[type="range"]::-moz-range-track {
+  background: #555;
+  height: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffff66;
+  cursor: pointer;
+  border: 2px solid #ffff66;
+}
+input[type="range"]::-moz-range-thumb:hover {
+  background: #ffff99;
+  box-shadow: 0 0 8px rgba(255, 255, 102, 0.5);
+}
+button {
+  background: transparent;
+  color: #39ff14;
+  border: 2px solid #39ff14;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: "Source Code Pro", monospace;
+  transition: all 0.2s;
+}
+button:hover {
+  background: rgba(57, 255, 20, 0.1);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+#audioToggle {
+  background: transparent !important;
+  color: #39ff14 !important;
+  border: 2px solid #39ff14 !important;
+}
+#audioToggle:hover {
+  background: rgba(57, 255, 20, 0.1) !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
 }
 
 @media (max-width: 900px) {

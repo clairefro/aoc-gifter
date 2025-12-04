@@ -231,8 +231,26 @@ function tolElHandler() {
 }
 
 scaleEl.addEventListener("input", () => {
-  fgScale = Number(scaleEl.value);
-  scaleVal.textContent = fgScale.toFixed(2);
+  if (processedFgCanvas) {
+    // Calculate current center position
+    const oldW = processedFgCanvas.width * fgScale;
+    const oldH = processedFgCanvas.height * fgScale;
+    const centerX = fgPos.x + oldW / 2;
+    const centerY = fgPos.y + oldH / 2;
+
+    // Update scale
+    fgScale = Number(scaleEl.value);
+    scaleVal.textContent = fgScale.toFixed(2);
+
+    // Recalculate position to keep center in same place
+    const newW = processedFgCanvas.width * fgScale;
+    const newH = processedFgCanvas.height * fgScale;
+    fgPos.x = centerX - newW / 2;
+    fgPos.y = centerY - newH / 2;
+  } else {
+    fgScale = Number(scaleEl.value);
+    scaleVal.textContent = fgScale.toFixed(2);
+  }
   drawPreview();
 });
 
@@ -257,8 +275,27 @@ resetFgBtn.addEventListener("click", () => {
 
 if (merchScaleEl) {
   merchScaleEl.addEventListener("input", () => {
-    merchScale = Number(merchScaleEl.value);
-    merchScaleVal.textContent = merchScale.toFixed(2);
+    const merch = merchImages[merchSelected];
+    if (merch) {
+      // Calculate current center position
+      const oldW = merch.width * merchScale;
+      const oldH = merch.height * merchScale;
+      const centerX = merchPos.x + oldW / 2;
+      const centerY = merchPos.y + oldH / 2;
+
+      // Update scale
+      merchScale = Number(merchScaleEl.value);
+      merchScaleVal.textContent = merchScale.toFixed(2);
+
+      // Recalculate position to keep center in same place
+      const newW = merch.width * merchScale;
+      const newH = merch.height * merchScale;
+      merchPos.x = centerX - newW / 2;
+      merchPos.y = centerY - newH / 2;
+    } else {
+      merchScale = Number(merchScaleEl.value);
+      merchScaleVal.textContent = merchScale.toFixed(2);
+    }
     drawPreview();
   });
 }
