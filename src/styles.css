@@ -266,7 +266,7 @@ button:hover {
   }
 
   body::before {
-    content: "Best viewed on a desktop computer";
+    content: "Open on a desktop computer to create digital AoC merch";
     display: flex;
     align-items: center;
     justify-content: center;
