@@ -113,16 +113,16 @@ try {
 function humanifyFilename(filepath) {
   const filename = path.basename(filepath, path.extname(filepath));
   return filename
-    .split('-')
-    .map(word => {
+    .split("-")
+    .map((word) => {
       // Special case for "aoc"
-      if (word.toLowerCase() === 'aoc') {
-        return 'AoC';
+      if (word.toLowerCase() === "aoc") {
+        return "AoC";
       }
       // Capitalize first letter of each word
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
-    .join(' ');
+    .join(" ");
 }
 
 // Automatically select the first merch item in the HTML
@@ -254,6 +254,7 @@ ${stampsHtml}
 
   <footer>
     <small>All processing is done locally in your browser.</small>
+    <div style="margin-top:6px;"><small>Made by <a href="https://clairefro.dev" target="_blank" rel="noopener noreferrer">clairefro</a></small></div>
   </footer>
 
   <audio id="bgMusic" loop>
